@@ -1,0 +1,80 @@
+---
+title       : Computing the probability to survive on Titanic
+subtitle    : Course Project
+author      : Stepan Goncharov
+job         : sociologist
+framework   : io2012      # {io2012, html5slides, shower, dzslides, ...}
+highlighter : highlight.js  # {highlight.js, prettify, highlight}
+hitheme     : tomorrow      # 
+widgets     : []            # {mathjax, quiz, bootstrap}
+mode        : selfcontained # {standalone, draft}
+knit        : slidify::knit2slides
+---
+
+## Why is it interesting?
+
+1. All people have different capabilities and resources to handle difficult situations.
+2. This fact lies into the basis of modern society organization: how organized public spaces and transport, for example.
+3. And analyzing such a tragic disaster like Titanic destraction helps to prevent them in future.
+
+--- .class #id 
+
+## Some preprocessing
+
+Loading necessary data
+```{r, results='asis', echo=F, message=F, warning=F}
+library(lattice)
+library(titanic)
+library(Hmisc)
+library(plyr)
+```
+
+```{r}
+test <- titanic_test[,c("Pclass", "Sex", "Age")]
+train_all <- titanic_train[,c("Pclass", "Sex", "Age")]
+all <- rbind(test, train_all)
+all$Age <- round(all$Age, 0)
+all$age_groups <- cut2(all$Age, g=4)
+all$Sex <- as.factor(all$Sex)
+all$Pclass <- as.factor(all$Pclass)
+```
+
+```{r, echo=FALSE}
+```
+--- .class #id 
+
+## Who travelled?
+
+```{r, echo=F, cache=T}
+histogram(~Pclass | Sex*age_groups, data = all, scales = list(x = list(labels = c("1 class", "2 class", "3 class"))), xlab = "Passenger Class", main = "Passanger classes by socio-demographic characteristics")
+```
+
+--- .class #id 
+
+## My application
+My applications builds GLM binomial model in data presented in titanic dataset.
+```{r, echo=F}
+train <- titanic_train[,c("Survived", "Pclass", "Sex", "Age")]
+train$Survived <- as.factor(train$Survived)
+train$Pclass <- as.factor(train$Pclass)
+train$Sex <- as.factor(train$Sex)
+
+fit <- glm(Survived ~ Age + Sex + Pclass, data = train, family = "binomial")
+```
+- Confidence Inteval & Coefficients
+```{r, echo=T, message=F}
+exp(confint(fit))
+exp(fit$coefficients)
+```
+```{r, echo=F}
+```
+
+--- .class #id 
+
+## Did these charectiristics really influence?
+
+```{r, echo=F, results='asis'}
+train$age_groups <- cut2(train$Age, g=4)
+train$Survived <- revalue(train$Survived, c("0" = "Not survived", "1" = "Survived"))
+histogram(~Pclass | Sex*Survived, data = train, scales = list(x = list(labels = c("1 class", "2 class", "3 class"))), xlab = "Passenger Class", main = "Who survived")
+```

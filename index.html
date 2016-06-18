@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Computing the probability to survive on Titanic</title>
+  <meta charset="utf-8">
+  <meta name="description" content="Computing the probability to survive on Titanic">
+  <meta name="author" content="Stepan Goncharov">
+  <meta name="generator" content="slidify" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  <link rel="stylesheet" href="libraries/frameworks/io2012/css/default.css" media="all" >
+  <link rel="stylesheet" href="libraries/frameworks/io2012/css/phone.css" 
+    media="only screen and (max-device-width: 480px)" >
+  <link rel="stylesheet" href="libraries/frameworks/io2012/css/slidify.css" >
+  <link rel="stylesheet" href="libraries/highlighters/highlight.js/css/tomorrow.css" />
+  <base target="_blank"> <!-- This amazingness opens all links in a new tab. -->  <link rel=stylesheet href="./assets/css/ribbons.css"></link>
+
+  
+  <!-- Grab CDN jQuery, fall back to local if offline -->
+  <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.7.min.js"></script>
+  <script>window.jQuery || document.write('<script src="libraries/widgets/quiz/js/jquery.js"><\/script>')</script> 
+  <script data-main="libraries/frameworks/io2012/js/slides" 
+    src="libraries/frameworks/io2012/js/require-1.0.8.min.js">
+  </script>
+  
+  
+
+</head>
+<body style="opacity: 0">
+  <slides class="layout-widescreen">
+    
+    <!-- LOGO SLIDE -->
+        <slide class="title-slide segue nobackground">
+  <hgroup class="auto-fadein">
+    <h1>Computing the probability to survive on Titanic</h1>
+    <h2>Course Project</h2>
+    <p>Stepan Goncharov<br/>sociologist</p>
+  </hgroup>
+  <article></article>  
+</slide>
+    
+
+    <!-- SLIDES -->
+    <slide class="" id="slide-1" style="background:;">
+  <hgroup>
+    <h2>Why is it interesting?</h2>
+  </hgroup>
+  <article data-timings="">
+    <ol>
+<li>All people have different capabilities and resources to handle difficult situations.</li>
+<li>This fact lies into the basis of modern society organization: how organized public spaces and transport, for example.</li>
+<li>And analyzing such a tragic disaster like Titanic destraction helps to prevent them in future.</li>
+</ol>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="class" id="id" style="background:;">
+  <hgroup>
+    <h2>Some preprocessing</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>Loading necessary data</p>
+
+<pre><code class="r">test &lt;- titanic_test[,c(&quot;Pclass&quot;, &quot;Sex&quot;, &quot;Age&quot;)]
+train_all &lt;- titanic_train[,c(&quot;Pclass&quot;, &quot;Sex&quot;, &quot;Age&quot;)]
+all &lt;- rbind(test, train_all)
+all$Age &lt;- round(all$Age, 0)
+all$age_groups &lt;- cut2(all$Age, g=4)
+all$Sex &lt;- as.factor(all$Sex)
+all$Pclass &lt;- as.factor(all$Pclass)
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="class" id="id" style="background:;">
+  <hgroup>
+    <h2>Who travelled?</h2>
+  </hgroup>
+  <article data-timings="">
+    <p><img src="assets/fig/unnamed-chunk-4-1.png" alt="plot of chunk unnamed-chunk-4"></p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="class" id="id" style="background:;">
+  <hgroup>
+    <h2>My application</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>My applications builds GLM binomial model in data presented in titanic dataset.</p>
+
+<ul>
+<li>Confidence Inteval &amp; Coefficients</li>
+</ul>
+
+<pre><code class="r">exp(confint(fit))
+</code></pre>
+
+<pre><code>##                   2.5 %     97.5 %
+## (Intercept) 20.37890724 98.3863313
+## Age          0.94905346  0.9780124
+## Sexmale      0.05293643  0.1194848
+## Pclass2      0.15515074  0.4621731
+## Pclass3      0.04299250  0.1297997
+</code></pre>
+
+<pre><code class="r">exp(fit$coefficients)
+</code></pre>
+
+<pre><code>## (Intercept)         Age     Sexmale     Pclass2     Pclass3 
+## 43.68534331  0.96369033  0.08023617  0.26987422  0.07572664
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="class" id="id" style="background:;">
+  <hgroup>
+    <h2>Did these charectiristics really influence?</h2>
+  </hgroup>
+  <article data-timings="">
+    <p><img src="assets/fig/unnamed-chunk-8-1.png" alt="plot of chunk unnamed-chunk-8"></p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+    <slide class="backdrop"></slide>
+  </slides>
+  <div class="pagination pagination-small" id='io2012-ptoc' style="display:none;">
+    <ul>
+      <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=1 title='Why is it interesting?'>
+         1
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=2 title='Some preprocessing'>
+         2
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=3 title='Who travelled?'>
+         3
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=4 title='My application'>
+         4
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=5 title='Did these charectiristics really influence?'>
+         5
+      </a>
+    </li>
+  </ul>
+  </div>  <!--[if IE]>
+    <script 
+      src="http://ajax.googleapis.com/ajax/libs/chrome-frame/1/CFInstall.min.js">  
+    </script>
+    <script>CFInstall.check({mode: 'overlay'});</script>
+  <![endif]-->
+</body>
+  <!-- Load Javascripts for Widgets -->
+  
+  <!-- LOAD HIGHLIGHTER JS FILES -->
+  <script src="libraries/highlighters/highlight.js/highlight.pack.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+  <!-- DONE LOADING HIGHLIGHTER JS FILES -->
+   
+  </html>
