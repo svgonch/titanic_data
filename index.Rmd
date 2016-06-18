@@ -45,7 +45,7 @@ all$Pclass <- as.factor(all$Pclass)
 
 ## Who travelled?
 
-```{r, echo=F, cache=T}
+```{r, echo=F}
 histogram(~Pclass | Sex*age_groups, data = all, scales = list(x = list(labels = c("1 class", "2 class", "3 class"))), xlab = "Passenger Class", main = "Passanger classes by socio-demographic characteristics")
 ```
 
